@@ -12,6 +12,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -32,8 +33,8 @@ public class BookResource {
 
 	@GET
 	@Path("/")
-	public Response list() {
-		List<Book> books = service.getAll();
+	public Response list(@QueryParam("status") Integer status) {
+		List<Book> books = service.getAll(status);
 		return Response.status(200).entity(translator.convertList(books)).build();
 	}
 
@@ -41,9 +42,9 @@ public class BookResource {
 	@Path("/")
 	public Response create(BookDto bookDto) {
 		Book book = translator.updateModel(bookDto, new Book());
-		
+
 		Book createdBook = service.create(book);
-		
+
 		return Response.status(200).entity(translator.convert(createdBook)).build();
 	}
 
@@ -58,9 +59,9 @@ public class BookResource {
 	@Path("/{id}")
 	public Response update(@PathParam("id") Integer id, BookDto bookDto) {
 		Book book = translator.updateModel(bookDto, service.getById(id));
-		
+
 		Book updatedBook = service.update(book);
-		
+
 		return Response.status(200).entity(translator.convert(updatedBook)).build();
 	}
 

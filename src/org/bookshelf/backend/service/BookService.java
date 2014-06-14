@@ -36,6 +36,12 @@ public class BookService {
 	public List<Book> getAll() {
 		return dao.getAll();
 	}
+	public List<Book> getAll(Integer status) {
+		if(status==null) {
+			return dao.getAll();
+		}
+		return dao.getAllByStatus(status);
+	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void delete(Integer id) {
