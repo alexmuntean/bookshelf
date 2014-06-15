@@ -58,9 +58,7 @@ public class BookResource {
 	@PUT
 	@Path("/{id}")
 	public Response update(@PathParam("id") Integer id, BookDto bookDto) {
-		Book book = translator.updateModel(bookDto, service.getById(id));
-
-		Book updatedBook = service.update(book);
+		Book updatedBook = service.update(bookDto);
 
 		return Response.status(200).entity(translator.convert(updatedBook)).build();
 	}

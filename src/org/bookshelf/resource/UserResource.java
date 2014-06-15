@@ -57,9 +57,7 @@ public class UserResource {
 	@PUT
 	@Path("/{id}")
 	public Response update(@PathParam("id") Integer id, UserDto userDto) {
-		User user = translator.updateModel(userDto, service.getById(id));
-		
-		User updatedUser = service.update(user);
+		User updatedUser = service.update(userDto);
 		
 		return Response.status(200).entity(translator.convert(updatedUser)).build();
 	}

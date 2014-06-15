@@ -10,11 +10,15 @@ import javax.inject.Inject;
 import org.bookshelf.backend.dao.HistoryDao;
 import org.bookshelf.backend.entity.History;
 import org.bookshelf.backend.exception.EntityNotFoundException;
+import org.bookshelf.client.entity.HistoryDto;
+import org.bookshelf.resource.translator.HistoryTranslator;
 
 @Stateless
 public class HistoryService {
 	@Inject
 	private HistoryDao dao;
+	@Inject
+	private HistoryTranslator translator;
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public History create(History History) {
@@ -22,10 +26,13 @@ public class HistoryService {
 	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public History update(History History) {
-		return dao.update(History);
+	public History update(HistoryDto historyDto) {
+		History history = getById(historyDto.getId());
+		translator.updateModel(historyDto, history);
+		return dao.update(history);
 	}
 
+	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public History getById(Integer id) {
 		if (dao.getById(id) == null) {
 			throw new EntityNotFoundException("History[" + id + "]");
@@ -33,6 +40,7 @@ public class HistoryService {
 		return dao.getById(id);
 	}
 
+	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public List<History> getAll() {
 		return dao.getAll();
 	}

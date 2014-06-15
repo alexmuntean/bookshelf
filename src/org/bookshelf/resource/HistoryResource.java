@@ -57,9 +57,7 @@ public class HistoryResource {
 	@PUT
 	@Path("/{id}")
 	public Response update(@PathParam("id") Integer id, HistoryDto historyDto) {
-		History history = translator.updateModel(historyDto, service.getById(id));
-
-		History updatedHistory = service.update(history);
+		History updatedHistory = service.update(historyDto);
 
 		return Response.status(200).entity(translator.convert(updatedHistory)).build();
 	}

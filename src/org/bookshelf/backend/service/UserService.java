@@ -10,11 +10,15 @@ import javax.inject.Inject;
 import org.bookshelf.backend.dao.UserDao;
 import org.bookshelf.backend.entity.User;
 import org.bookshelf.backend.exception.EntityNotFoundException;
+import org.bookshelf.client.entity.UserDto;
+import org.bookshelf.resource.translator.UserTranslator;
 
 @Stateless
 public class UserService {
 	@Inject
 	private UserDao dao;
+	@Inject
+	private UserTranslator translator;
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public User create(User User) {
@@ -22,10 +26,13 @@ public class UserService {
 	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public User update(User User) {
-		return dao.update(User);
+	public User update(UserDto userDto) {
+		User user = getById(userDto.getId());
+		translator.updateModel(userDto, user);
+		return dao.update(user);
 	}
 
+	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public User getById(Integer id) {
 		if (dao.getById(id) == null) {
 			throw new EntityNotFoundException("User[" + id + "]");
@@ -33,6 +40,7 @@ public class UserService {
 		return dao.getById(id);
 	}
 
+	@TransactionAttribute(TransactionAttributeType.SUPPORTS)
 	public List<User> getAll() {
 		return dao.getAll();
 	}

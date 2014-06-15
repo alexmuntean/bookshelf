@@ -37,7 +37,7 @@ public abstract class GenericDao<T> {
 	}
 
 	public T getById(Integer id) {
-		return (T) getEntityManager().find(getPersistentClass(), id);
+		return getEntityManager().find(getPersistentClass(), id);
 	}
 
 	public List<T> getAll() {

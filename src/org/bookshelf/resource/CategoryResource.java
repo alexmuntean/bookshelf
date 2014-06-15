@@ -57,9 +57,7 @@ public class CategoryResource {
 	@PUT
 	@Path("/{id}")
 	public Response update(@PathParam("id") Integer id, CategoryDto categoryDto) {
-		Category category = translator.updateModel(categoryDto, service.getById(id));
-		
-		Category updatedCategory = service.update(category);
+		Category updatedCategory = service.update(categoryDto);
 		
 		return Response.status(200).entity(translator.convert(updatedCategory)).build();
 	}
